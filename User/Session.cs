@@ -6,6 +6,8 @@ class Session(IAIChat chat, UserRepositoryAccessor user)
 {
     private readonly IAIChat _chat = chat;
 
+    private readonly uint id;
+
 
 	public IReadOnlyList<Message> Messages => (IReadOnlyList<Message>)_chat.Messages;
 
