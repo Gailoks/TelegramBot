@@ -31,7 +31,8 @@ namespace TelegramAIBot.AI.OpenAI
 				_configuration.ModelName,
 				_configuration.VisionModelName ?? _configuration.ModelName,
 				_configuration.ModelContextTokens,
-				_configuration.ContextCompressionMode
+				_configuration.ContextCompressionMode,
+				_configuration.Thinking
 			);
 		}
 
@@ -42,7 +43,7 @@ namespace TelegramAIBot.AI.OpenAI
 			headers ??= [];
 			headers.Add("Authorization", "Bearer " + _configuration.Token);
 
-			var serializedBody = JsonConvert.SerializeObject(body, new JsonSerializerSettings{NullValueHandling = NullValueHandling.Ignore});
+			var serializedBody = JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 			var content = new StringContent(serializedBody, Encoding.UTF8, "application/json");
 
 			var request = new HttpRequestMessage()
@@ -144,6 +145,8 @@ namespace TelegramAIBot.AI.OpenAI
 			public string EmbeddingModelName { get; init; } = "text-embedding-3-small";
 
 			public string? VisionModelName { get; init; } = null;
+
+			public bool Thinking { get; init; } = false;
 		}
 
 		public record ServerResponse<TResponse>(TResponse ResponseBody, HttpResponseMessage RawServerResponse) where TResponse : notnull;

@@ -45,13 +45,14 @@ namespace TelegramAIBot
 						?? throw new InvalidOperationException("Missing database connection string. Set TelegramAIBot_Postgres or ConnectionStrings:UserContextDB.");
 
 					Console.WriteLine(
-						"Startup config loaded. OpenAIServer={0}, ChatEndpoint={1}, EmbeddingsEndpoint={2}, Model={3}, ContextTokens={4}, CompressionMode={5}, DB={6}",
+						"Startup config loaded. OpenAIServer={0}, ChatEndpoint={1}, EmbeddingsEndpoint={2}, Model={3}, ContextTokens={4}, CompressionMode={5}, DB={7}, Thinking={6}",
 						config["AI:OpenAI:OpenAIServer"],
 						config["AI:OpenAI:ChatCompletionEndpoint"],
 						config["AI:OpenAI:EmbeddingsEndpoint"],
 						config["AI:OpenAI:ModelName"],
 						config["AI:OpenAI:ModelContextTokens"],
 						config["AI:OpenAI:ContextCompressionMode"],
+						config["AI:OpenAI:Thinking"],
 						userContextConnectionString
 					);
 

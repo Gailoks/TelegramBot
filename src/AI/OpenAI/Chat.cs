@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
 using TelegramAIBot.AI.Abstractions;
 using TelegramAIBot.AI.Tools;
 
@@ -151,9 +152,15 @@ namespace TelegramAIBot.AI.OpenAI
 				}
 
 				var content = choice["content"]?.Value<string>()
-					?? choice["content"]?.ToString();
+					?? choice["content"]?.ToString() ?? string.Empty;
 
-				var message = new Message(MessageRole.Assistant, content ?? string.Empty);
+				// Remove thinking blocks if configured
+				if (_client.InternalConfiguration.Thinking == false)
+				{
+					content = RemoveThinkingBlocks(content);
+				}
+
+				var message = new Message(MessageRole.Assistant, content);
 
 				Messages.Add(message);
 				_client.Logger?.LogInformation(
@@ -171,6 +178,20 @@ namespace TelegramAIBot.AI.OpenAI
 			Options = modification(Options);
 		}
 
+		private static string RemoveThinkingBlocks(string content)
+		{
+			if (string.IsNullOrWhiteSpace(content))
+				return content;
+
+			// Remove ~~~~ tags (both opening and closing)
+			var cleaned = Regex.Replace(content, @"<think>.*?</think>", "", RegexOptions.Singleline);
+			cleaned = Regex.Replace(cleaned, @"<thinking>.*?</thinking>", "", RegexOptions.Singleline);
+			
+			// Clean up extra whitespace and newlines
+			cleaned = Regex.Replace(cleaned, @"\n\s*\n", "\n\n");
+			
+			return cleaned.Trim();
+		}
 
 		private async Task CompactContextIfNeededAsync(ChatOptions options)
 		{
@@ -221,7 +242,6 @@ namespace TelegramAIBot.AI.OpenAI
 			}
 		}
 
-
 		private async Task<bool> SummarizeOlderMessagesAsync(OpenAIClient.Configuration config)
 		{
 			if (Messages.Count <= config.ContextMinimumRetainedMessages)
@@ -264,7 +284,6 @@ namespace TelegramAIBot.AI.OpenAI
 			return true;
 		}
 
-
 		private async Task<string> SummarizeTranscriptAsync(string transcript, OpenAIClient.Configuration config)
 		{
 			var request = new
@@ -290,7 +309,6 @@ namespace TelegramAIBot.AI.OpenAI
 			return response.ResponseBody["choices"]?[0]?["message"]?["content"]?.Value<string>() ?? string.Empty;
 		}
 
-
 		private static string BuildTranscript(IEnumerable<Message> messages, string? existingSummary)
 		{
 			var builder = new System.Text.StringBuilder();
@@ -308,7 +326,6 @@ namespace TelegramAIBot.AI.OpenAI
 			return builder.ToString();
 		}
 
-
 		private static int EstimateContextTokens(ChatOptions options, IEnumerable<Message> messages)
 		{
 			var totalChars = 0;
@@ -325,7 +342,6 @@ namespace TelegramAIBot.AI.OpenAI
 			return Math.Max(1, totalChars / 4);
 		}
 
-
 		private static string Truncate(string value, int maxLength)
 		{
 			if (value.Length <= maxLength)
@@ -333,6 +349,5 @@ namespace TelegramAIBot.AI.OpenAI
 
 			return value[..maxLength] + "...";
 		}
-
 	}
 }
