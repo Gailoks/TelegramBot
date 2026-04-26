@@ -1,0 +1,26 @@
+{
+    "AI":
+    {
+        "OpenAI":
+        {
+            "OpenAIServer": "",
+            "ChatCompletionEndpoint": "v1/chat/completions",
+            "ModelName": "",
+            "ModelContextTokens": 32000,
+            "ContextCompressionMode": "Summary",
+            "ContextMinimumRetainedMessages": 6,
+            "ContextSummaryMaxCharacters": 4000,
+            "EmbeddingModelName": "text-embedding-3-small",
+            "VisionModelName": ""
+        },
+
+        "Gug":
+        {
+            "ChatCompletionCreationOperationDuration": null
+        }
+    },
+    "Telemetry":
+    {
+        "Path": "telemetry"
+    }
+}
