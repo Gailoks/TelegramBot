@@ -10,6 +10,7 @@ internal static class ToolSet
 		[
 			TelemetrySearchTool.Create(telemetry, userId),
 			TimerTool.Create(scheduleRevoke),
+			MathTool.Create(),
 			TimeTool.Create()
 		];
 	}

@@ -8,7 +8,7 @@ internal static class TimeTool
 	{
 		return new ToolDefinition(
 			"get_time",
-			"Get the current UTC time.",
+			"Get the current time in current timezone.",
 			new
 			{
 				type = "object",
@@ -17,7 +17,7 @@ internal static class TimeTool
 			},
 			_ =>
 			{
-				var now = DateTimeOffset.UtcNow;
+				var now = DateTimeOffset.Now; // Fixed using local time now
 				return Task.FromResult(JsonConvert.SerializeObject(new
 				{
 					utc = now.ToString("O"),
