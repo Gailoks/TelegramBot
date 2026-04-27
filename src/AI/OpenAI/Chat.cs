@@ -184,8 +184,9 @@ namespace TelegramAIBot.AI.OpenAI
 				return content;
 
 			// Remove ~~~~ tags (both opening and closing)
-			var cleaned = Regex.Replace(content, @"<think>.*?</think>", "", RegexOptions.Singleline);
-			cleaned = Regex.Replace(cleaned, @"<thinking>.*?</thinking>", "", RegexOptions.Singleline);
+			// Remove thinking blocks even if it is on multiple lines
+			var cleaned = Regex.Replace(content, @"<think>.*?</think>", "");
+			cleaned = Regex.Replace(cleaned, @"<thinking>.*?</thinking>", "");
 			
 			// Clean up extra whitespace and newlines
 			cleaned = Regex.Replace(cleaned, @"\n\s*\n", "\n\n");

@@ -10,7 +10,7 @@ internal static class TelemetrySearchTool
 	{
 		return new ToolDefinition(
 			"search",
-			"Memory search attempt. Search relevant stored telemetry entries for a query and return the closest matches.",
+			"Memory search attempt. Search relevant old dialog entries for a query and return the closest matches.",
 			new
 			{
 				type = "object",
